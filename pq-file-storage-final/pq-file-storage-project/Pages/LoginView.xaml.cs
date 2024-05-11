@@ -1,11 +1,20 @@
-﻿namespace pq_file_storage_project
+﻿using pq_file_storage_project.Features.Login;
+using pq_file_storage_project.ViewModel;
+
+namespace pq_file_storage_project.Pages
 {
     public partial class LoginView : ContentPage
     {
 
-        public LoginView()
+        public LoginView(LoginViewModel lvm, LoginFormViewModel lfvm)
         {
             InitializeComponent();
+
+            // Assign the instance of LoginViewModel to BindingContext
+            BindingContext = lvm;
+
+            // Assign the instance of LoginFormViewModel to BindingContext
+            BindingContext = lfvm;
         }
 
         // Event handler for email entry completion
@@ -150,6 +159,12 @@
         private void OnRegisterPointerPressed(object sender, EventArgs e)
         {
             SemanticScreenReader.Announce("Register link pointer pressed");
+        }
+
+        // Event handler for Register link tapped
+        private async void ToRegisterView(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(RegisterView));
         }
     }
 

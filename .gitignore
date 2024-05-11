@@ -482,3 +482,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+.env  # Ignores base .env file
+**/.env  # Ignores all nested .env files in subdirectories

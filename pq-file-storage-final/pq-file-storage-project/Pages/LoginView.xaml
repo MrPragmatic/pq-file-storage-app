@@ -1,27 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="pq_file_storage_project.LoginView"
-             Title="Login"
-             Shell.NavBarIsVisible="False">
+             xmlns:local="pq_file_storage_project"
+             x:Class="pq_file_storage_project.Pages.LoginView">
 
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior IsVisible="False" IsEnabled="False" />
-    </Shell.BackButtonBehavior>
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="File">
+            <MenuFlyoutItem Text="Exit"
+            Command="{Binding ExitCommand}" />
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
 
     <ScrollView>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="320" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <Grid RowDefinitions="*"
+            ColumnDefinitions="0.3*, 0.7*">
 
             <Grid BackgroundColor="AliceBlue" Grid.Column="0" />
 
             <StackLayout
             Grid.Column="0"
             VerticalOptions="Center">
-                
+
                 <FlexLayout
                 Direction="Column"
                 AlignItems="Center"
@@ -35,14 +34,14 @@
                     SemanticProperties.HeadingLevel="Level1" />
 
                     <Label
-                    Text="Post-Quantum &#10; Secure File storage"
+                    Text="Post-Quantum &#10; Secure File Storage"
                     Style="{StaticResource SubHeadline}"
                     Padding="0,10,0,30"
                     SemanticProperties.HeadingLevel="Level2"
                     SemanticProperties.Description="Welcome to dot net Multi platform App U I" />
 
                     <Label
-                    Text="- Security reimagined -"
+                    Text="- Security Reimagined -"
                     Style="{StaticResource SubHeadline}"
                     FontSize="20"
                     SemanticProperties.HeadingLevel="Level3"
@@ -80,40 +79,30 @@
                         <!-- Email Entry -->
                         <Entry
                         x:Name="EmailEntry"
+                        Text="{Binding Email}"
                         BackgroundColor="AliceBlue"
                         Placeholder="Enter your email"
-                        Keyboard="Email"
+                        Keyboard="Text"
                         ReturnType="Next"
-                        Completed="OnEmailCompleted"
                         SemanticProperties.Description="Enter your email" />
 
                     </StackLayout>
 
                     <!-- Validation Error Label -->
                     <Label
-                    x:Name="EmailErrorLabel"
+                    x:Name="UsernameErrorLabel"
                     TextColor="Red"
                     IsVisible="False"
-                    SemanticProperties.Description="Email validation error" />
+                    SemanticProperties.Description="Username validation error" />
 
                     <!-- Login Button -->
                     <Button
                     x:Name="LoginBtn"
                     Text="Login"
-                    Clicked="OnLoginClicked"
+                    Command="{Binding LoginCommand}"
                     HorizontalOptions="Fill"
                     SemanticProperties.Hint="Logs you in" 
                     CornerRadius="0" >
-
-                        <Button.GestureRecognizers>
-
-                            <PointerGestureRecognizer
-                                PointerEnteredCommand="{Binding BtnOnPointerEnteredCommand}"
-                                PointerExitedCommand="{Binding BtnOnPointerExitCommand}"
-                                PointerMovedCommand="{Binding BtnOnPointerMovedCommand}"/>
-
-                        </Button.GestureRecognizers>
-
                     </Button>
 
                 </StackLayout>
@@ -132,20 +121,13 @@
                     <!-- Register link -->
                     <Label
                     Margin="0,10,0,0">
-                        
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="Register " />
-                                <Span 
-                                Text="here" 
-                                FontSize="15"
-                                TextColor="Blue"
-                                TextDecorations="Underline">
-                                    
+                                <Span Text="here" FontSize="15" TextColor="Blue" TextDecorations="Underline">
                                     <Span.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://learn.microsoft.com/dotnet/maui/" />
+                                        <TapGestureRecognizer Tapped="ToRegisterView" />
                                     </Span.GestureRecognizers>
-                                    
                                 </Span>
                             </FormattedString>
                         </Label.FormattedText>
@@ -154,7 +136,7 @@
                 </StackLayout>
 
             </StackLayout>
-            
+
         </Grid>
     </ScrollView>
 
