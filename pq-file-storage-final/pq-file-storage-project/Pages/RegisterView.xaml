@@ -65,23 +65,6 @@
                     WidthRequest="300"
                     HorizontalOptions="Start">
 
-                    <!-- Username Label -->
-                    <Label
-                        Text="Username"
-                        FontSize="15"
-                        SemanticProperties.HeadingLevel="Level3"
-                        Margin="0,0,0,10"/>
-                    
-                    <!-- Username -->
-                    <Entry
-                        x:Name="UsernameEntry"
-                        Text="{Binding Username}"
-                        BackgroundColor="AliceBlue"
-                        Placeholder="Enter your username"
-                        ReturnType="Next"
-                        SemanticProperties.Description="Enter your username"
-                        Margin="0,0,0,10" />
-
                     <!-- Email Label -->
                     <Label
                         Text="Email"

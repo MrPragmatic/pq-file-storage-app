@@ -1,4 +1,4 @@
-﻿using Firebase.Auth;
+﻿using Supabase;
 using pq_file_storage_project.Shared.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -6,14 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using pq_file_storage_project.Services;
 
 namespace pq_file_storage_project.Features.Register
 {
     public class RegisterFormViewModel : ViewModelBase
     {
-        private string _email;
-        private string _password;
-        private string _confirmPassword;
+        private string _email = string.Empty;
+        private string _password = string.Empty;
+        private string _confirmPassword = string.Empty;
 
         public string Email
         {
@@ -40,7 +41,7 @@ namespace pq_file_storage_project.Features.Register
                 OnPropertyChanged(nameof(Password));
             }
         }
-        
+
         public string ConfirmPassword
         {
             get
@@ -55,10 +56,11 @@ namespace pq_file_storage_project.Features.Register
         }
 
         public ICommand RegisterCommand { get; }
-        public RegisterFormViewModel(FirebaseAuthClient authClient)
+        public new ICommand ExitCommand { get; }
+        public RegisterFormViewModel(SupabaseService supabaseService)
         {
-            RegisterCommand = new RegisterCommand(this, authClient);
+            RegisterCommand = new RegisterCommand(this, supabaseService);
+            ExitCommand = new Command(async () => await ExitCommand());
         }
-
     }
 }

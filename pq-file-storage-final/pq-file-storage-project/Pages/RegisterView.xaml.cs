@@ -1,14 +1,12 @@
 using pq_file_storage_project.Features.Register;
-using pq_file_storage_project.ViewModel;
 
 namespace pq_file_storage_project.Pages
 {
     public partial class RegisterView : ContentPage
     {
-        public RegisterView(RegisterViewModel rvm, RegisterFormViewModel rfvm)
+        public RegisterView(RegisterFormViewModel rfvm)
         {
             InitializeComponent();
-            BindingContext = rvm;
             BindingContext = rfvm;
 
         }

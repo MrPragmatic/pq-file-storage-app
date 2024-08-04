@@ -1,0 +1,96 @@
+<!-- UserSpaceView.xaml -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="pq_file_storage_project.Pages.UserSpaceView"
+             x:Name="UserSpace">
+
+    <!-- Toolbar Items -->
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Encrypt"
+                     Command="{Binding EncryptAndSyncCommand}" />
+        <ToolbarItem Text="Decrypt"
+                     Command="{Binding DecryptAndSyncCommand}" />
+        <ToolbarItem Text="Back up"
+                     Command="{Binding BackUpCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="File">
+            <MenuFlyoutItem Text="Log out"
+                            Command="{Binding ExitCommand}" />
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
+
+    <ScrollView>
+        <Grid RowDefinitions="*"
+              ColumnDefinitions="0.3*, 0.7*">
+
+            <!-- Left Column: Folder Explorer -->
+            <StackLayout Grid.Column="0" VerticalOptions="FillAndExpand" BackgroundColor="AliceBlue" Padding="0,5,0,0">
+                <CollectionView ItemsSource="{Binding Folders}" SelectionMode="Single" SelectedItem="{Binding SelectedFolder}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal" Spacing="0">
+                                <Image Source="{Binding Icon}" WidthRequest="20" HeightRequest="20" Margin="5" />
+                                <Label Text="{Binding Name}" VerticalOptions="Center" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+
+            <!-- Right Column: Files in Selected Folder -->
+            <StackLayout Grid.Column="1" VerticalOptions="FillAndExpand" Padding="10">
+                <CollectionView ItemsSource="{Binding SelectedFolder.Items}" SelectionMode="Single" SelectedItem="{Binding SelectedFile}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="4" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Vertical" HorizontalOptions="Center">
+                                <Image Source="{Binding Icon}" WidthRequest="32" HeightRequest="32" Margin="0,15,0,0" />
+                                <Label Text="{Binding Name}" HorizontalOptions="Center" />
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        NumberOfTapsRequired="2"
+                                        Command="{Binding Path=BindingContext.OpenFileCommand, Source={x:Reference UserSpace}}"
+                                        CommandParameter="{Binding .}" />
+                                    <TapGestureRecognizer />
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <FlyoutBase.ContextFlyout>
+                        <MenuFlyout>
+                            <MenuFlyoutSubItem Text="New">
+                                <MenuFlyoutItem Text="File"
+                                Command="{Binding Path=BindingContext.CreateNewFileCommand, Source={x:Reference UserSpace}}"
+                                CommandParameter="{Binding .}" />
+                                <MenuFlyoutItem Text="Folder"
+                                Command="{Binding Path=BindingContext.CreateNewFolderCommand, Source={x:Reference UserSpace}}"
+                                CommandParameter="{Binding .}" />
+                            </MenuFlyoutSubItem>
+                            <MenuFlyoutItem Text="Delete"
+                                Command="{Binding Path=BindingContext.DeleteCommand, Source={x:Reference UserSpace}}"
+                                CommandParameter="{Binding .}" />
+                        </MenuFlyout>
+                    </FlyoutBase.ContextFlyout>
+                </CollectionView>
+                <FlyoutBase.ContextFlyout>
+                    <MenuFlyout>
+                        <MenuFlyoutSubItem Text="New">
+                            <MenuFlyoutItem Text="File"
+                                Command="{Binding Path=BindingContext.CreateNewFileCommand, Source={x:Reference UserSpace}}"
+                                CommandParameter="{Binding .}" />
+                            <MenuFlyoutItem Text="Folder"
+                                Command="{Binding Path=BindingContext.CreateNewFolderCommand, Source={x:Reference UserSpace}}"
+                                CommandParameter="{Binding .}" />
+                        </MenuFlyoutSubItem>
+                    </MenuFlyout>
+                </FlyoutBase.ContextFlyout>
+            </StackLayout>
+
+        </Grid>
+    </ScrollView>
+
+</ContentPage>

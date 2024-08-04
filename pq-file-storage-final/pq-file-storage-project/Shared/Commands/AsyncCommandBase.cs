@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace pq_file_storage_project.Shared.Commands
+
+// Implemented following tutorial by Singleton Sean: https://youtu.be/adk9RonuKw0
 {
-    public abstract class AsyncCommandBase : ICommand
+    // This class is a base class for all asynchronous commands
+    public abstract class AsyncCommandBase(Action<Exception>? onException = null) : ICommand
     {
-        private readonly Action<Exception> _onException;
+        // This action is called when an exception occurs
+        private readonly Action<Exception>? _onException = onException;
 
         private bool _isExecuting;
 
-        public bool isExecuting
+        public bool IsExecuting
         {
             get
             {
@@ -25,21 +29,16 @@ namespace pq_file_storage_project.Shared.Commands
                 OnCanExecuteChanged();
             }
         }
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged;
 
-        public AsyncCommandBase(Action<Exception> onException = null)
-        {
-            _onException = onException;
-        }
-
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
             return !_isExecuting;
         }
 
-        public async void Execute(object parameter)
+        public async void Execute(object? parameter)
         {
-            isExecuting = true;
+            IsExecuting = true;
 
             try
             {
@@ -49,10 +48,10 @@ namespace pq_file_storage_project.Shared.Commands
             {
                 _onException?.Invoke(ex);
             }
-            isExecuting = false;
+            IsExecuting = false;
         }
 
-        protected abstract Task ExecuteAsync(object parameter);
+        protected abstract Task ExecuteAsync(object? parameter);
 
         protected void OnCanExecuteChanged()
         {

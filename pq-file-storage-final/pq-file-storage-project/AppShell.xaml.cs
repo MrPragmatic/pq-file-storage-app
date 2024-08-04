@@ -11,6 +11,8 @@ namespace pq_file_storage_project
 
             Routing.RegisterRoute(nameof(LoginView), typeof(LoginView));
             Routing.RegisterRoute(nameof(RegisterView), typeof(RegisterView));
+            Routing.RegisterRoute(nameof(OtpView), typeof(OtpView));
+            Routing.RegisterRoute(nameof(UserSpaceView), typeof(UserSpaceView));
         }
     }
 }

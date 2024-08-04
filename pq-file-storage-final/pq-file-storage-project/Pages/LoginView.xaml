@@ -90,10 +90,11 @@
 
                     <!-- Validation Error Label -->
                     <Label
-                    x:Name="UsernameErrorLabel"
+                    x:Name="EmailErrorLabel"
+                    Text="{Binding EmailError}"
                     TextColor="Red"
                     IsVisible="False"
-                    SemanticProperties.Description="Username validation error" />
+                    SemanticProperties.Description="Email validation error" />
 
                     <!-- Login Button -->
                     <Button

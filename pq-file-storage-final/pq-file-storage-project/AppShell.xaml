@@ -13,4 +13,10 @@
     <ShellContent 
         ContentTemplate="{DataTemplate pages:RegisterView}"
         Route="register"/>
+    <ShellContent 
+        ContentTemplate="{DataTemplate pages:OtpView}"
+        Route="otp"/>
+    <ShellContent 
+        ContentTemplate="{DataTemplate pages:UserSpaceView}"
+        Route="user-space"/>
 </Shell>

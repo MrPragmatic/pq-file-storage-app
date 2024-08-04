@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="pq_file_storage_project"
+             x:Class="pq_file_storage_project.Pages.OtpView">
+
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="File">
+            <MenuFlyoutItem Text="Exit"
+            Command="{Binding ExitCommand}" />
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
+
+    <ScrollView>
+        <Grid RowDefinitions="*"
+              ColumnDefinitions="*">
+
+            <StackLayout VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="CenterAndExpand"
+                         Padding="10">
+                <Frame HasShadow="False"
+                       BorderColor="Transparent"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       WidthRequest="500"
+                       MaximumWidthRequest="500"
+                       Padding="20">
+                    <StackLayout>
+                        <Label Text="Enter OTP"
+                               FontSize="Large"
+                               HorizontalOptions="Center" 
+                               Margin="0,0,0,16" />
+                        <Grid ColumnDefinitions="3*,1*">
+                            <Entry x:Name="OtpEntry"
+                                   Text="{Binding TOKEN}"
+                                   Placeholder="Enter your one-time password"
+                                   Keyboard="Numeric"
+                                   Grid.Column="0"
+                                   HorizontalOptions="FillAndExpand" />
+                            <Button Text="Verify OTP"
+                                    Command="{Binding VerifyOtpCommand}"
+                                    Grid.Column="1"
+                                    HorizontalOptions="FillAndExpand" />
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+
+        </Grid>
+    </ScrollView>
+
+</ContentPage>
