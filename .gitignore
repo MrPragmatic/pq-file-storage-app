@@ -485,3 +485,5 @@ $RECYCLE.BIN/
 
 .env  # Ignores base .env file
 **/.env  # Ignores all nested .env files in subdirectories
+/pq-file-storage-final/pq-file-storage-project/Properties/launchSettings.json
+/pq-file-storage-final/pq-file-storage-project/appsettings.json
