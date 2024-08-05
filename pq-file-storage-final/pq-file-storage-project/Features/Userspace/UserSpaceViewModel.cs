@@ -1046,12 +1046,16 @@ namespace pq_file_storage_project.Features.Userspace
             var mainPage = Application.Current?.MainPage;
             if (mainPage != null)
             {
-                string newEmail = await mainPage.DisplayPromptAsync("Change Email", "Enter your new email address. You will get confirmation link to your old email", "OK", "Cancel", "New Email");
-                if (!string.IsNullOrEmpty(newEmail))
+                string newEmail = await mainPage.DisplayPromptAsync("Change Email", "Enter your new email address. You will get confirmation link to your old and new email", "OK", "Cancel", "New Email");
+
+                // Validate the email format
+                if (!string.IsNullOrEmpty(newEmail) && IsValidEmail(newEmail))
                 {
                     try
                     {
-                        await _supabaseService.UpdateUser(newEmail);                    }
+                        await _supabaseService.UpdateUser(newEmail);
+                        await mainPage.DisplayAlert("Success", "Email updated successfully. Please check your old email for a confirmation link.", "OK");
+                    }
                     catch (Exception ex)
                     {
                         await mainPage.DisplayAlert("Error", $"Error updating email: {ex.Message}", "OK");
@@ -1059,8 +1063,22 @@ namespace pq_file_storage_project.Features.Userspace
                 }
                 else
                 {
-                    await mainPage.DisplayAlert("Cancelled", "Email update was cancelled.", "OK");
+                    await mainPage.DisplayAlert("Invalid Email", "Please enter a valid email address.", "OK");
                 }
+            }
+        }
+        
+        // validate email helper method
+        private bool IsValidEmail(string email)
+        {
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == email;
+            }
+            catch
+            {
+                return false;
             }
         }
     }
