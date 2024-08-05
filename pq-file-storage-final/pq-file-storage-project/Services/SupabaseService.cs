@@ -79,7 +79,7 @@ namespace pq_file_storage_project.Services
             try
             {
                 await _supabaseClient.Auth.Update(attrs);
-                await Application.Current.MainPage.DisplayAlert("Success", "User email updated successfully.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Success", "Email link sent to both old and new email addresses to change your email. Please click both links.", "OK");
             }
             catch (Exception ex)
             {

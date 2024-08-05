@@ -1051,9 +1051,7 @@ namespace pq_file_storage_project.Features.Userspace
                 {
                     try
                     {
-                        await _supabaseService.UpdateUser(newEmail);
-                        await mainPage.DisplayAlert("Success", "Email updated successfully.", "OK");
-                    }
+                        await _supabaseService.UpdateUser(newEmail);                    }
                     catch (Exception ex)
                     {
                         await mainPage.DisplayAlert("Error", $"Error updating email: {ex.Message}", "OK");
