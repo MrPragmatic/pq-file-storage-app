@@ -86,6 +86,8 @@ namespace pq_file_storage_project.Features.Userspace
 
         public ICommand DeleteCommand { get; }
 
+        public ICommand ChangeUserEmailCommand { get; }
+
         public UserSpaceViewModel(SupabaseService supabaseService)
         {
             _supabaseService = supabaseService;
@@ -102,6 +104,7 @@ namespace pq_file_storage_project.Features.Userspace
             CreateNewFileCommand = new Command(CreateNewFile);
             CreateNewFolderCommand = new Command(CreateNewFolder);
             DeleteCommand = new Command(async () => await Delete());
+            ChangeUserEmailCommand = new Command(async () => await ChangeUserEmail());
 
             LoadFolders();
             LoadRootFiles();
@@ -1033,6 +1036,32 @@ namespace pq_file_storage_project.Features.Userspace
                 {
                     // Display an alert with the error message indicating that an error occurred during the backup method execution
                     await mainPage.DisplayAlert("Error", $"Error during backup: {ex.Message}", "OK");
+                }
+            }
+        }
+
+        public async Task ChangeUserEmail()
+        {
+            await _sessionRedirector.StayOrRedirectToLogin();
+            var mainPage = Application.Current?.MainPage;
+            if (mainPage != null)
+            {
+                string newEmail = await mainPage.DisplayPromptAsync("Change Email", "Enter your new email address. You will get confirmation link to your old email", "OK", "Cancel", "New Email");
+                if (!string.IsNullOrEmpty(newEmail))
+                {
+                    try
+                    {
+                        await _supabaseService.UpdateUser(newEmail);
+                        await mainPage.DisplayAlert("Success", "Email updated successfully.", "OK");
+                    }
+                    catch (Exception ex)
+                    {
+                        await mainPage.DisplayAlert("Error", $"Error updating email: {ex.Message}", "OK");
+                    }
+                }
+                else
+                {
+                    await mainPage.DisplayAlert("Cancelled", "Email update was cancelled.", "OK");
                 }
             }
         }

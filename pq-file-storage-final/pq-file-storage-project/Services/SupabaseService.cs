@@ -61,6 +61,32 @@ namespace pq_file_storage_project.Services
             await _supabaseClient.InitializeAsync();
         }
 
+
+
+        public async Task UpdateUser(string email)
+        {
+            _supabaseClient.Auth.LoadSession();
+            var sessionExists = _supabaseClient.Auth.RetrieveSessionAsync();
+
+            if (sessionExists == null)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "You are not logged in. Please log in and try again.", "OK");
+                return;
+            }
+
+            var attrs = new UserAttributes { Email = email };
+
+            try
+            {
+                await _supabaseClient.Auth.Update(attrs);
+                await Application.Current.MainPage.DisplayAlert("Success", "User email updated successfully.", "OK");
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to update user: {ex.Message}", "OK");
+            }
+        }
+
         public Supabase.Client GetClient()
         {
             return _supabaseClient;
@@ -104,16 +130,6 @@ namespace pq_file_storage_project.Services
                         break;
                 }
             });
-        }
-
-        public async Task SaveCurrentSession()
-        {
-            var session = _supabaseClient.Auth.CurrentSession;
-            if (session != null)
-            {
-                var sessionHandler = new LadeSessionHandler();
-                sessionHandler.SaveSession(session);
-            }
         }
 
         // Example method to save the token
@@ -189,6 +205,9 @@ namespace pq_file_storage_project.Services
         public async Task<Session?> CheckOtpCode(string email, string TOKEN)
         {
             var session = await _supabaseClient.Auth.VerifyOTP(email, TOKEN, EmailOtpType.Email);
+            var newPersistence = new LadeSessionHandler();
+            newPersistence.SaveSession(session);
+            _supabaseClient.Auth.SetPersistence(newPersistence);
             return session;
         }
 

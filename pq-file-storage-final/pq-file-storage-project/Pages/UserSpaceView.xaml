@@ -16,6 +16,8 @@
 
     <ContentPage.MenuBarItems>
         <MenuBarItem Text="File">
+            <MenuFlyoutItem Text="Change your email"
+                            Command="{Binding ChangeUserEmailCommand}" />
             <MenuFlyoutItem Text="Log out"
                             Command="{Binding ExitCommand}" />
         </MenuBarItem>

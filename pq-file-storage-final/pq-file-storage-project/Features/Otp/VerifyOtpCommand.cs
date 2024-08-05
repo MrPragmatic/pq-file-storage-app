@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using pq_file_storage_project.Services;
 using pq_file_storage_project.SessionManager;
+using Supabase.Gotrue;
 
 namespace pq_file_storage_project.Features.Otp
 {
