@@ -24,12 +24,14 @@ using Microsoft.Maui.Storage;
 using System.Security.Cryptography.Xml;
 using Amazon.Util.Internal;
 using Amazon.Runtime.SharedInterfaces;
+using pq_file_storage_project.SessionManager;
 
 namespace pq_file_storage_project.Features.Userspace
 {
     public class UserSpaceViewModel : ViewModelBase
     {
         private readonly SupabaseService _supabaseService;
+        private readonly SessionRedirector _sessionRedirector;
         public ObservableCollection<FolderItem> Folders { get; set; }
 
         private FolderItem? _selectedFolder;
@@ -87,6 +89,7 @@ namespace pq_file_storage_project.Features.Userspace
         public UserSpaceViewModel(SupabaseService supabaseService)
         {
             _supabaseService = supabaseService;
+            _sessionRedirector = new SessionRedirector(_supabaseService);
             Folders = new ObservableCollection<FolderItem>();
             SelectedFiles = new ObservableCollection<FileItem>();
 
@@ -106,6 +109,8 @@ namespace pq_file_storage_project.Features.Userspace
 
         private async void CreateNewFile()
         {
+            await _sessionRedirector.StayOrRedirectToLogin();
+
             // the list of allowed file extensions
             string[] allowedExtensions = { ".doc", ".docx", ".rtf", ".xls", ".xlsx", ".ppt", ".pptx", ".pdf", ".txt", ".encrypted", ".key", ".base64", ".iv" };
 
@@ -168,6 +173,7 @@ namespace pq_file_storage_project.Features.Userspace
 
         private async void CreateNewFolder()
         {
+            await _sessionRedirector.StayOrRedirectToLogin();
             if (SelectedFolder == null)
             {
                 await Application.Current.MainPage.DisplayAlert("Error", "No folder selected.", "OK");
@@ -225,6 +231,8 @@ namespace pq_file_storage_project.Features.Userspace
 
         private async Task Delete()
         {
+            await _sessionRedirector.StayOrRedirectToLogin();
+
             var mainPage = Application.Current?.MainPage;
 
             try
@@ -601,8 +609,9 @@ namespace pq_file_storage_project.Features.Userspace
             };
         }
 
-        private void OpenFile(FileItem file)
+        private async void OpenFile(FileItem file)
         {
+            await _sessionRedirector.StayOrRedirectToLogin();
             try
             {
                 string userBaseFilesPath = AppDomain.CurrentDomain.BaseDirectory;
@@ -632,6 +641,7 @@ namespace pq_file_storage_project.Features.Userspace
         // private asynchronous Encrypt method is responsible for encrypting the selected file
         private async Task Encrypt()
         {
+            await _sessionRedirector.StayOrRedirectToLogin();
             try
             {
                 // Check if the selected file is null
@@ -793,6 +803,7 @@ namespace pq_file_storage_project.Features.Userspace
         // private asynchronous Decrypt method is responsible for decrypting the selected file
         private async Task Decrypt()
         {
+            await _sessionRedirector.StayOrRedirectToLogin();
             try
             {
                 // Check if the selected file is null
@@ -944,6 +955,8 @@ namespace pq_file_storage_project.Features.Userspace
         // private asynchronous BackUp method is responsible for backing up the selected file to the predefined S3 bucket
         private async Task BackUp()
         {
+            await _sessionRedirector.StayOrRedirectToLogin();
+
             // save the mainPage to a variable mainPage
             var mainPage = Application.Current?.MainPage;
 

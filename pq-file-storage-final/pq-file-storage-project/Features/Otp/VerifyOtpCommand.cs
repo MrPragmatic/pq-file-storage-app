@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using pq_file_storage_project.Services;
+using pq_file_storage_project.SessionManager;
 
 namespace pq_file_storage_project.Features.Otp
 {
@@ -13,6 +14,7 @@ namespace pq_file_storage_project.Features.Otp
     {
         private readonly OtpFormViewModel viewModel = viewModel;
         private readonly SupabaseService _supabaseService = supabaseService;
+        private readonly SessionRedirector _sessionRedirector = new SessionRedirector(supabaseService);
 
         protected override async Task ExecuteAsync(object? parameter)
         {
@@ -27,7 +29,6 @@ namespace pq_file_storage_project.Features.Otp
                 }
                 else
                 {
-                    var session = _supabaseService.CheckUserSession();
                     var mainPage = Application.Current?.MainPage;
                     if (mainPage != null)
                     {

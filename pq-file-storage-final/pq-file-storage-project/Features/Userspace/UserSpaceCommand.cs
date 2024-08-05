@@ -12,6 +12,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel.Communication;
 using Supabase.Interfaces;
 using pq_file_storage_project.Features.Userspace;
+using pq_file_storage_project.SessionManager;
 
 namespace pq_file_storage_project.Features.Login
 {
@@ -19,11 +20,13 @@ namespace pq_file_storage_project.Features.Login
     {
         private readonly UserSpaceViewModel viewModel = viewModel;
         private readonly SupabaseService _supabaseService = supabaseService;
+        private readonly SessionRedirector _sessionRedirector = new SessionRedirector(supabaseService);
 
         protected override async Task ExecuteAsync(object? parameter)
         {
             // initialize Supabase client
             await _supabaseService.InitializeAsync();
+            await _sessionRedirector.StayOrRedirectToLogin();
         }
     }
 }

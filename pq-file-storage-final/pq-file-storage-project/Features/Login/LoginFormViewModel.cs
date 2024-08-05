@@ -21,6 +21,8 @@ namespace pq_file_storage_project.Features.Login
     {
         private string _email = string.Empty;
         private string _emailError = string.Empty;
+        private readonly SupabaseService _supabaseService;
+        private readonly EmailService _emailService;
 
         public string Email
         {
@@ -48,8 +50,10 @@ namespace pq_file_storage_project.Features.Login
         public ICommand LoginCommand { get; }
         public new ICommand ExitCommand { get; }
 
-        public LoginFormViewModel(SupabaseService supabaseService)
+        public LoginFormViewModel(SupabaseService supabaseService, EmailService emailService)
         {
+            _supabaseService = supabaseService;
+            _emailService = emailService;
             LoginCommand = new LoginCommand(this, supabaseService);
             ExitCommand = new Command(async () => await ExitCommand());
         }
@@ -82,13 +86,12 @@ namespace pq_file_storage_project.Features.Login
                 return false;
             }
         }
-
         // public asynchronous method to navigate to OTP view
         public async Task OnSentOtpSuccess()
         {
+            _emailService.Email = Email;
             // Navigate to OTP view
             await Shell.Current.GoToAsync(nameof(OtpView));
         }
-
     }
 }

@@ -45,10 +45,6 @@ namespace pq_file_storage_project.Features.Login
             // if OTP is sent, create a new OtpFormViewModel with user email and call OnSentOtpSuccess method
             if (OtpIsSent)
             {
-                _ = new OtpFormViewModel(_supabaseService)
-                {
-                    Email = viewModel.Email
-                };
                 await viewModel.OnSentOtpSuccess();
             } else
             {

@@ -9,6 +9,7 @@ using pq_file_storage_project.Features.Otp;
 using pq_file_storage_project.Features.Userspace;
 using pq_file_storage_project.Pages;
 using pq_file_storage_project.Services;
+using pq_file_storage_project.SessionManager;
 using Supabase;
 using System.Reflection;
 
@@ -79,30 +80,42 @@ namespace pq_file_storage_project
                         {
                             e.Cancel = true;
 
-                            var mainPage = App.Current?.MainPage;
-                            if (mainPage != null)
+                            try
                             {
-                                bool result = await mainPage.DisplayAlert(
-                                    "Exiting Lade",
-                                    "Are you sure you want to log out and close the application?",
-                                    "Yes",
-                                    "Cancel");
-
-                                if (result)
+                                var mainPage = App.Current?.MainPage;
+                                if (mainPage != null)
                                 {
-                                    var serviceProvider = builder.Services.BuildServiceProvider();
-                                    var supabaseService = serviceProvider.GetService<SupabaseService>();
-                                    if (supabaseService != null)
+                                    bool result = await mainPage.DisplayAlert(
+                                        "Exiting Lade",
+                                        "Are you sure you want to log out and close the application?",
+                                        "Yes",
+                                        "Cancel");
+
+                                    if (result)
                                     {
-                                        await supabaseService.SignOut();
+                                        var serviceProvider = builder.Services.BuildServiceProvider();
+                                        var supabaseService = serviceProvider.GetService<SupabaseService>();
+                                        if (supabaseService != null)
+                                        {
+                                            await supabaseService.SignOut();
+                                            new LadeSessionHandler().DestroySession();
+                                        }
+                                        App.Current?.Quit();
                                     }
-                                    App.Current?.Quit();
+                                }
+                                else
+                                {
+                                    // display error if main page is null
+                                    await mainPage?.DisplayAlert("Error", "MainPage is null. Cannot display alert.", "OK");
                                 }
                             }
-                            else
+                            catch (Exception ex)
                             {
-                                // Fallback behavior if App.Current or MainPage is null
-                                Console.WriteLine("MainPage is null. Cannot display alert.");
+                                // handle unexpected error
+                                if (App.Current?.MainPage != null)
+                                {
+                                    await App.Current.MainPage.DisplayAlert("Error", $"An unexpected error occurred: {ex.Message}", "OK");
+                                }
                             }
                         };
                     });
@@ -116,6 +129,7 @@ namespace pq_file_storage_project
             // Create Supabase service as a singleton.
             builder.Services.AddSingleton<SupabaseService>();
 
+            builder.Services.AddSingleton<EmailService>();
             return builder.Build();
         }
     }

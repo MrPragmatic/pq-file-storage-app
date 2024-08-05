@@ -1,4 +1,8 @@
-﻿namespace pq_file_storage_project
+﻿using pq_file_storage_project.Services;
+using pq_file_storage_project.SessionManager;
+using System.Runtime.InteropServices;
+
+namespace pq_file_storage_project
 {
     public partial class App : Application
     {
@@ -13,6 +17,11 @@
         {
             // Handle when the app starts, opens the app on the login view
             await Shell.Current.GoToAsync("//login");
+
+            // calling session handler
+            var supabaseService = new SupabaseService();
+            var loginView = new SessionRedirector(supabaseService);
+            await loginView.StayOrRedirectToLogin();
 
             base.OnStart();
         }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using pq_file_storage_project.Services;
+using pq_file_storage_project.SessionManager;
 
 namespace pq_file_storage_project.Shared.ViewModels
 
@@ -42,6 +43,7 @@ namespace pq_file_storage_project.Shared.ViewModels
             if (result && _supabaseService != null)
             {
                 await _supabaseService.SignOut();
+                new LadeSessionHandler().DestroySession();
                 Application.Current?.Quit();
             }
         }
