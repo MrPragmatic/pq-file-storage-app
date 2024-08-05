@@ -181,6 +181,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="Features\RecoverData\" />
 	  <Folder Include="UserFiles\" />
 	</ItemGroup>
 

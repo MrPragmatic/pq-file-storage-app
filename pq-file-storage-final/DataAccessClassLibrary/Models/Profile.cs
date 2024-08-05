@@ -11,7 +11,7 @@ namespace DataAccessClassLibrary.Models
     public class Profile : BaseModel
     {
         [PrimaryKey("id", false)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Column("email")]
         [Required(ErrorMessage = "The email field is required.")]

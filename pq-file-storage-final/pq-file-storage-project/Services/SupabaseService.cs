@@ -59,6 +59,11 @@ namespace pq_file_storage_project.Services
             await _supabaseClient.InitializeAsync();
         }
 
+        public Supabase.Client GetClient()
+        {
+            return _supabaseClient;
+        }
+
         public async Task AfterInitialSignUpListenToAuthEvents()
         {
             var session = _supabaseClient.Auth.CurrentSession;

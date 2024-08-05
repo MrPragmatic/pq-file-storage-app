@@ -735,7 +735,7 @@ namespace pq_file_storage_project.Features.Userspace
                         // save the encrypted data key to a string variable encryptedKeyBase64
                         await File.WriteAllTextAsync(encryptedDataKeyFilePath, encryptedKeyBase64);
 
-                        // Delete the encrypted file
+                        // Delete the unencrypted file
                         File.Delete(unencryptedFilePath);
 
                         // if mainPage is not null, display an alert with the success message
@@ -944,8 +944,6 @@ namespace pq_file_storage_project.Features.Userspace
         // private asynchronous BackUp method is responsible for backing up the selected file to the predefined S3 bucket
         private async Task BackUp()
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
             // save the mainPage to a variable mainPage
             var mainPage = Application.Current?.MainPage;
 
@@ -1003,9 +1001,6 @@ namespace pq_file_storage_project.Features.Userspace
                     {
                         // Display an alert with the success message indicating that the file was backed up successfully
                         await mainPage.DisplayAlert("Success", "File backed up successfully.", "OK");
-                        stopwatch.Stop();
-                        long elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-                        await mainPage.DisplayAlert("Success", $"Elapsed time: {elapsedMilliseconds}", "OK");
                     }
                 }
                 // catch possible exception during the backup upload process

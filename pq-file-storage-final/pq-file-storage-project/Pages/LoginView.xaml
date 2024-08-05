@@ -93,7 +93,6 @@
                     x:Name="EmailErrorLabel"
                     Text="{Binding EmailError}"
                     TextColor="Red"
-                    IsVisible="False"
                     SemanticProperties.Description="Email validation error" />
 
                     <!-- Login Button -->

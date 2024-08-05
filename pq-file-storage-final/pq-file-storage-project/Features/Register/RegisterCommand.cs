@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using pq_file_storage_project.Services;
 using System.Diagnostics;
+using static Supabase.Postgrest.Constants;
 
 namespace pq_file_storage_project.Features.Register
 {
@@ -68,22 +69,38 @@ namespace pq_file_storage_project.Features.Register
             try
             {
                 // attempt to initialize Supabase client
-                await _supabaseService.InitializeAsync();
+                var supabaseClient = _supabaseService.GetClient();
 
-                // register user
-                await _supabaseService.SignUpAsync(viewModel.Email, viewModel.Password);
+                var existingUser = await supabaseClient
+                .From<DataAccessClassLibrary.Models.Profile>()
+                .Select("*")
+                .Filter("email", Operator.Equals, viewModel.Email)
+                .Single();
 
-                // Handle success
-                if (mainPage != null)
+                if (existingUser != null)
                 {
-                    // display an alert when the registration is successful
-                    await mainPage.DisplayAlert("Success", "Registered successfully! Check your email for confirmation link and confirm your user account.", "OK");
+                    // Email already exists
+                    if (mainPage != null)
+                    {
+                        await mainPage.DisplayAlert("Error", "Email is already registered. Please use a different email address.", "OK");
+                    }
                 }
+                else
+                {
+                    // Register user
+                    await _supabaseService.SignUpAsync(viewModel.Email, viewModel.Password);
 
-                // Clear fields after successful registration
-                viewModel.Email = string.Empty;
-                viewModel.Password = string.Empty;
-                viewModel.ConfirmPassword = string.Empty;
+                    // Handle success
+                    if (mainPage != null)
+                    {
+                        await mainPage.DisplayAlert("Success", "Registered successfully! Check your email for a confirmation link and confirm your user account.", "OK");
+                    }
+
+                    // Clear fields after successful registration
+                    viewModel.Email = string.Empty;
+                    viewModel.Password = string.Empty;
+                    viewModel.ConfirmPassword = string.Empty;
+                }
             }
             catch (Exception ex)
             {
